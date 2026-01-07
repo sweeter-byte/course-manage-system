@@ -1,0 +1,119 @@
+/* Global Styles for Course Management System */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Ant Design overrides for dark sidebar */
+.ant-layout-sider {
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%) !important;
+}
+
+.ant-menu-dark {
+  background: transparent !important;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.2) 100%) !important;
+  border-right: 3px solid #667eea;
+}
+
+.ant-menu-dark .ant-menu-item:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Card hover effects */
+.ant-card.ant-card-hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Smooth transitions */
+.ant-card,
+.ant-btn,
+.ant-menu-item {
+  transition: all 0.3s ease;
+}
+
+/* Table styles */
+.ant-table-thead>tr>th {
+  background: #fafafa !important;
+  font-weight: 600;
+}
+
+/* Modal styles */
+.ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+/* Button styles */
+.ant-btn-primary {
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.ant-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+/* Input focus styles */
+.ant-input:focus,
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused,
+.ant-select-focused .ant-select-selector {
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2) !important;
+}
+
+/* Tag styles */
+.ant-tag {
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Statistic value */
+.ant-statistic-content-value {
+  font-weight: 600;
+}
+
+/* Empty state styling */
+.ant-empty {
+  padding: 40px 0;
+}
