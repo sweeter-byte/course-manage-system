@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.course.system.mapper.CourseEnrollmentMapper">
+    <resultMap id="BaseResultMap" type="com.course.system.entity.CourseEnrollment">
+        <id column="enrollment_id" property="enrollmentId" jdbcType="VARCHAR"/>
+        <result column="student_id" property="studentId" jdbcType="VARCHAR"/>
+        <result column="course_id" property="courseId" jdbcType="VARCHAR"/>
+        <result column="enrollment_time" property="enrollmentTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="CourseResultMap" type="com.course.system.entity.Course">
+        <id column="course_id" property="courseId" jdbcType="VARCHAR"/>
+        <result column="creator_id" property="creatorId" jdbcType="VARCHAR"/>
+        <result column="teacher_id" property="teacherId" jdbcType="VARCHAR"/>
+        <result column="course_name" property="courseName" jdbcType="VARCHAR"/>
+        <result column="course_description" property="courseDescription" jdbcType="VARCHAR"/>
+        <result column="enrollment_count" property="enrollmentCount" jdbcType="INTEGER"/>
+        <result column="course_start_date" property="courseStartDate" jdbcType="DATE"/>
+        <result column="course_end_date" property="courseEndDate" jdbcType="DATE"/>
+        <result column="course_status" property="courseStatus" jdbcType="VARCHAR"/>
+        <result column="course_semester" property="courseSemester" jdbcType="VARCHAR"/>
+        <result column="course_location" property="courseLocation" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="UserResultMap" type="com.course.system.entity.User">
+        <id column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="role" property="role" jdbcType="VARCHAR"/>
+        <result column="student_id" property="studentId" jdbcType="VARCHAR"/>
+        <result column="teacher_id" property="teacherId" jdbcType="VARCHAR"/>
+        <result column="college" property="college" jdbcType="VARCHAR"/>
+        <result column="major" property="major" jdbcType="VARCHAR"/>
+        <result column="class_name" property="className" jdbcType="VARCHAR"/>
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.course.system.entity.CourseEnrollment">
+        INSERT INTO course_enrollments (enrollment_id, student_id, course_id, enrollment_time)
+        VALUES (#{enrollmentId}, #{studentId}, #{courseId}, #{enrollmentTime})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM course_enrollments WHERE student_id = #{studentId} AND course_id = #{courseId}
+    </delete>
+
+    <select id="selectByStudentAndCourse" resultMap="BaseResultMap">
+        SELECT * FROM course_enrollments WHERE student_id = #{studentId} AND course_id = #{courseId}
+    </select>
+
+    <select id="selectCoursesByStudent" resultMap="CourseResultMap">
+        SELECT c.* FROM courses c
+        INNER JOIN course_enrollments e ON c.course_id = e.course_id
+        WHERE e.student_id = #{studentId}
+    </select>
+
+    <select id="selectStudentsByCourse" resultMap="UserResultMap">
+        SELECT u.user_id, u.username, u.real_name, u.phone_number, u.email, u.role, 
+               u.student_id, u.teacher_id, u.college, u.major, u.class_name, u.register_time
+        FROM users u
+        INNER JOIN course_enrollments e ON u.user_id = e.student_id
+        WHERE e.course_id = #{courseId}
+    </select>
+
+    <select id="countByStudent" resultType="int">
+        SELECT COUNT(*) FROM course_enrollments WHERE student_id = #{studentId}
+    </select>
+
+    <select id="countByCourse" resultType="int">
+        SELECT COUNT(*) FROM course_enrollments WHERE course_id = #{courseId}
+    </select>
+</mapper>

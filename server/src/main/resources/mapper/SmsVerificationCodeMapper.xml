@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.system.mapper.SmsVerificationCodeMapper">
+    
+    <resultMap id="BaseResultMap" type="com.course.system.entity.SmsVerificationCode">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="expires_at" property="expiresAt" jdbcType="TIMESTAMP"/>
+        <result column="used" property="used" jdbcType="BOOLEAN"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="com.course.system.entity.SmsVerificationCode">
+        INSERT INTO sms_verification_codes (phone_number, code, type, expires_at, used)
+        VALUES (#{phoneNumber}, #{code}, #{type}, #{expiresAt}, #{used})
+    </insert>
+    
+    <select id="findLatestValid" resultMap="BaseResultMap">
+        SELECT * FROM sms_verification_codes 
+        WHERE phone_number = #{phoneNumber} 
+          AND type = #{type} 
+          AND used = FALSE 
+          AND expires_at > NOW()
+        ORDER BY created_at DESC 
+        LIMIT 1
+    </select>
+    
+    <update id="markAsUsed">
+        UPDATE sms_verification_codes SET used = TRUE WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteExpired">
+        DELETE FROM sms_verification_codes WHERE expires_at < NOW()
+    </delete>
+</mapper>

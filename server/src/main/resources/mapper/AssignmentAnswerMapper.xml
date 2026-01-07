@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.course.system.mapper.AssignmentAnswerMapper">
+    <resultMap id="BaseResultMap" type="com.course.system.entity.AssignmentAnswer">
+        <id column="answer_id" property="answerId" jdbcType="VARCHAR"/>
+        <result column="assignment_id" property="assignmentId" jdbcType="VARCHAR"/>
+        <result column="student_id" property="studentId" jdbcType="VARCHAR"/>
+        <result column="answer_content" property="answerContent" jdbcType="VARCHAR"/>
+        <result column="answer_status" property="answerStatus" jdbcType="VARCHAR"/>
+        <result column="teacher_feedback" property="teacherFeedback" jdbcType="VARCHAR"/>
+        <result column="score" property="score" jdbcType="DECIMAL"/>
+        <result column="submission_time" property="submissionTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.course.system.entity.AssignmentAnswer">
+        INSERT INTO assignment_answers (answer_id, assignment_id, student_id, answer_content, answer_status, teacher_feedback, score, submission_time)
+        VALUES (#{answerId}, #{assignmentId}, #{studentId}, #{answerContent}, #{answerStatus}, #{teacherFeedback}, #{score}, #{submissionTime})
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM assignment_answers WHERE answer_id = #{answerId}
+    </select>
+
+    <select id="selectByAssignmentId" resultMap="BaseResultMap">
+        SELECT * FROM assignment_answers WHERE assignment_id = #{assignmentId}
+    </select>
+    
+    <select id="selectByAssignmentAndStudent" resultMap="BaseResultMap">
+        SELECT * FROM assignment_answers WHERE assignment_id = #{assignmentId} AND student_id = #{studentId}
+    </select>
+
+    <update id="update" parameterType="com.course.system.entity.AssignmentAnswer">
+        UPDATE assignment_answers
+        SET answer_content = #{answerContent},
+            answer_status = #{answerStatus},
+            teacher_feedback = #{teacherFeedback},
+            score = #{score},
+            submission_time = #{submissionTime}
+        WHERE answer_id = #{answerId}
+    </update>
+</mapper>
