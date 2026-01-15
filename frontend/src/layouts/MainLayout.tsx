@@ -10,7 +10,6 @@ import {
     LogoutOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    FolderOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { logout, getCurrentUser } from '../services/auth';
@@ -50,11 +49,6 @@ const MainLayout: React.FC = () => {
                     key: '/teacher/courses',
                     icon: <BookOutlined />,
                     label: '课程管理',
-                },
-                {
-                    key: '/teacher/resources',
-                    icon: <FolderOutlined />,
-                    label: '课程资源',
                 },
                 {
                     key: '/teacher/feedback',

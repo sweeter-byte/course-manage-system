@@ -28,7 +28,6 @@ public class DashboardActivity extends AppCompatActivity {
     private CourseAdapter adapter;
     private TextView tvWelcome;
     private Button btnLogout;
-    private Button btnProfile;
     private SessionManager sessionManager;
 
     @Override
@@ -55,8 +54,7 @@ public class DashboardActivity extends AppCompatActivity {
         
         tvWelcome = findViewById(R.id.tvWelcome);
         btnLogout = findViewById(R.id.btnLogout);
-        btnProfile = findViewById(R.id.btnProfile);
-
+        
         // 设置欢迎语
         String realName = sessionManager.getRealName();
         if (realName != null && !realName.isEmpty()) {
@@ -73,20 +71,6 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void setupListeners() {
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
-        btnProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
-        });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // 从个人中心返回时刷新欢迎语
-        String realName = sessionManager.getRealName();
-        if (realName != null && !realName.isEmpty()) {
-            tvWelcome.setText("欢迎，" + realName);
-        }
     }
 
     private void loadCourses() {
