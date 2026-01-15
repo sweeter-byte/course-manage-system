@@ -22,6 +22,7 @@ import GradingCenter from './pages/teacher/GradingCenter';
 import TeacherCourseManagement from './pages/teacher/CourseManagement';
 import CreateAssignment from './pages/teacher/CreateAssignment';
 import FeedbackBoard from './pages/teacher/FeedbackBoard';
+import ResourceManagement from './pages/teacher/ResourceManagement';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
@@ -65,6 +66,7 @@ const App: React.FC = () => {
             <Route path="grading" element={<GradingCenter />} />
             <Route path="courses" element={<TeacherCourseManagement />} />
             <Route path="courses/:courseId/assignments/new" element={<CreateAssignment />} />
+            <Route path="resources" element={<ResourceManagement />} />
             <Route path="feedback" element={<FeedbackBoard />} />
           </Route>
 
