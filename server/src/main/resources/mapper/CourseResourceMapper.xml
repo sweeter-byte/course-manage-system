@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.system.mapper.CourseResourceMapper">
+
+    <resultMap id="BaseResultMap" type="com.course.system.entity.CourseResource">
+        <id column="resource_id" property="resourceId" jdbcType="VARCHAR"/>
+        <result column="course_id" property="courseId" jdbcType="VARCHAR"/>
+        <result column="uploader_id" property="uploaderId" jdbcType="VARCHAR"/>
+        <result column="resource_name" property="resourceName" jdbcType="VARCHAR"/>
+        <result column="original_file_name" property="originalFileName" jdbcType="VARCHAR"/>
+        <result column="stored_file_name" property="storedFileName" jdbcType="VARCHAR"/>
+        <result column="file_path" property="filePath" jdbcType="VARCHAR"/>
+        <result column="file_size" property="fileSize" jdbcType="BIGINT"/>
+        <result column="file_type" property="fileType" jdbcType="VARCHAR"/>
+        <result column="resource_type" property="resourceType" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="download_count" property="downloadCount" jdbcType="INTEGER"/>
+        <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP"/>
+        <result column="visible" property="visible" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.course.system.entity.CourseResource">
+        INSERT INTO course_resources (
+            resource_id, course_id, uploader_id, resource_name,
+            original_file_name, stored_file_name, file_path,
+            file_size, file_type, resource_type, description,
+            download_count, visible
+        ) VALUES (
+            #{resourceId}, #{courseId}, #{uploaderId}, #{resourceName},
+            #{originalFileName}, #{storedFileName}, #{filePath},
+            #{fileSize}, #{fileType}, #{resourceType}, #{description},
+            #{downloadCount}, #{visible}
+        )
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM course_resources WHERE resource_id = #{resourceId}
+    </select>
+
+    <select id="selectByCourseId" resultMap="BaseResultMap">
+        SELECT * FROM course_resources
+        WHERE course_id = #{courseId} AND visible = TRUE
+        ORDER BY upload_time DESC
+    </select>
+
+    <select id="selectByUploaderId" resultMap="BaseResultMap">
+        SELECT * FROM course_resources
+        WHERE uploader_id = #{uploaderId}
+        ORDER BY upload_time DESC
+    </select>
+
+    <update id="update" parameterType="com.course.system.entity.CourseResource">
+        UPDATE course_resources SET
+            resource_name = #{resourceName},
+            description = #{description},
+            resource_type = #{resourceType},
+            visible = #{visible}
+        WHERE resource_id = #{resourceId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM course_resources WHERE resource_id = #{resourceId}
+    </delete>
+
+    <update id="incrementDownloadCount">
+        UPDATE course_resources
+        SET download_count = download_count + 1
+        WHERE resource_id = #{resourceId}
+    </update>
+
+    <update id="updateVisibility">
+        UPDATE course_resources
+        SET visible = #{visible}
+        WHERE resource_id = #{resourceId}
+    </update>
+
+</mapper>
