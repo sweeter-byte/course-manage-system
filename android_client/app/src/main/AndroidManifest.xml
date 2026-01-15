@@ -30,7 +30,6 @@
         <activity android:name=".CourseDetailActivity" />
         <activity android:name=".AssignmentDetailActivity" />
         <activity android:name=".FeedbackActivity" />
-        <activity android:name=".ProfileActivity" />
     </application>
 
 </manifest>

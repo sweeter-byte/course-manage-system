@@ -107,25 +107,3 @@ CREATE TABLE IF NOT EXISTS sms_verification_codes (
     used BOOLEAN DEFAULT FALSE,
     INDEX idx_phone_type (phone_number, type)
 );
-
--- Course Resources Table (课程资源表)
-CREATE TABLE IF NOT EXISTS course_resources (
-    resource_id VARCHAR(50) PRIMARY KEY,
-    course_id VARCHAR(50) NOT NULL,
-    uploader_id VARCHAR(50) NOT NULL,
-    resource_name VARCHAR(200) NOT NULL,
-    original_file_name VARCHAR(200),
-    stored_file_name VARCHAR(100),
-    file_path VARCHAR(500),
-    file_size BIGINT,
-    file_type VARCHAR(100),
-    resource_type VARCHAR(50) DEFAULT 'other' COMMENT 'courseware, document, video, other',
-    description TEXT,
-    download_count INT DEFAULT 0,
-    upload_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    visible BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (course_id) REFERENCES courses(course_id),
-    FOREIGN KEY (uploader_id) REFERENCES users(user_id),
-    INDEX idx_course_id (course_id),
-    INDEX idx_uploader_id (uploader_id)
-);

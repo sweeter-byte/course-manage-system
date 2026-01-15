@@ -19,24 +19,15 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     // ==================== 用户相关 ====================
-
+    
     @POST("api/users/login")
     Call<ApiResponse<User>> login(@Body Map<String, String> loginData);
-
+    
     @POST("api/users/register")
     Call<ApiResponse<Object>> register(@Body User user);
-
+    
     @POST("api/users/logout")
     Call<ApiResponse<Object>> logout();
-
-    @GET("api/users/{userId}")
-    Call<ApiResponse<User>> getUserById(@retrofit2.http.Path("userId") String userId);
-
-    @POST("api/users/update")
-    Call<ApiResponse<Object>> updateUser(@Body Map<String, Object> userData);
-
-    @POST("api/users/update-password")
-    Call<ApiResponse<Object>> updatePassword(@Body Map<String, String> passwordData);
 
     // ==================== 课程相关 ====================
     
