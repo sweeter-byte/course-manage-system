@@ -2,6 +2,9 @@ package com.course.system.service;
 
 import com.course.system.entity.SmsVerificationCode;
 import com.course.system.mapper.SmsVerificationCodeMapper;
+import com.course.system.sms.SmsProviderFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,23 +15,25 @@ import java.util.Random;
 @Service
 public class SmsServiceImpl implements SmsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);
+
     @Autowired
     private SmsVerificationCodeMapper codeMapper;
+
+    @Autowired
+    private SmsProviderFactory smsProviderFactory;
 
     private static final int CODE_LENGTH = 6;
     private static final int EXPIRE_MINUTES = 5;
 
     @Override
     public boolean sendCode(String phoneNumber, String type) {
-        // Generate 6-digit random code
         String code = generateCode();
 
-        // Calculate expiration time (5 minutes from now)
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, EXPIRE_MINUTES);
         Date expiresAt = calendar.getTime();
 
-        // Save to database
         SmsVerificationCode smsCode = new SmsVerificationCode();
         smsCode.setPhoneNumber(phoneNumber);
         smsCode.setCode(code);
@@ -39,15 +44,11 @@ public class SmsServiceImpl implements SmsService {
         int result = codeMapper.insert(smsCode);
 
         if (result > 0) {
-            // Simulate sending SMS - print to console
-            System.out.println("========================================");
-            System.out.println("【短信验证码模拟发送】");
-            System.out.println("手机号: " + phoneNumber);
-            System.out.println("验证码: " + code);
-            System.out.println("类型: " + type);
-            System.out.println("有效期: " + EXPIRE_MINUTES + "分钟");
-            System.out.println("========================================");
-            return true;
+            boolean sent = smsProviderFactory.getProvider().sendVerificationCode(phoneNumber, code);
+            if (sent) {
+                logger.info("Code sent to {} via {}", phoneNumber, smsProviderFactory.getProviderName());
+                return true;
+            }
         }
         return false;
     }
@@ -55,9 +56,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public boolean verifyCode(String phoneNumber, String code, String type) {
         SmsVerificationCode smsCode = codeMapper.findLatestValid(phoneNumber, type);
-
         if (smsCode != null && smsCode.getCode().equals(code)) {
-            // Mark as used
             codeMapper.markAsUsed(smsCode.getId());
             return true;
         }
