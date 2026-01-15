@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.tencentcloudapi</groupId>
             <artifactId>tencentcloud-sdk-java-sms</artifactId>
-            <version>3.1.851</version>
+            <version>3.1.574</version>
         </dependency>
 
         <!-- File Upload -->
