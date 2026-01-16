@@ -18,19 +18,31 @@
     </insert>
     
     <select id="findLatestValid" resultMap="BaseResultMap">
-        SELECT * FROM sms_verification_codes 
-        WHERE phone_number = #{phoneNumber} 
-          AND type = #{type} 
-          AND used = FALSE 
+        SELECT * FROM sms_verification_codes
+        WHERE phone_number = #{phoneNumber}
+          AND type = #{type}
+          AND used = FALSE
           AND expires_at > NOW()
-        ORDER BY created_at DESC 
+        ORDER BY created_at DESC
         LIMIT 1
     </select>
-    
+
+    <select id="findLatestByPhoneAndType" resultMap="BaseResultMap">
+        SELECT * FROM sms_verification_codes
+        WHERE phone_number = #{phoneNumber}
+          AND type = #{type}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
     <update id="markAsUsed">
         UPDATE sms_verification_codes SET used = TRUE WHERE id = #{id}
     </update>
-    
+
+    <delete id="deleteById">
+        DELETE FROM sms_verification_codes WHERE id = #{id}
+    </delete>
+
     <delete id="deleteExpired">
         DELETE FROM sms_verification_codes WHERE expires_at < NOW()
     </delete>
