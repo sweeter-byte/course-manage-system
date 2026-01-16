@@ -1,20 +1,17 @@
 package com.course.system.sms;
 
 import com.course.system.config.SmsConfig;
-import com.tencentcloudapi.common.Credential;
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
-import com.tencentcloudapi.common.profile.ClientProfile;
-import com.tencentcloudapi.common.profile.HttpProfile;
-import com.tencentcloudapi.sms.v20210111.SmsClient;
-import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
-import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
-import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Tencent Cloud SMS Provider
  * 腾讯云短信服务实现
+ *
+ * 注意: 当前版本使用模拟模式，因为腾讯云SDK依赖已被注释。
+ * 如需使用真实的腾讯云短信服务，请:
+ * 1. 在 pom.xml 中取消注释腾讯云SDK依赖
+ * 2. 将此文件替换为完整的SDK实现
  *
  * 使用前请完成以下步骤:
  * 1. 注册腾讯云账号: https://cloud.tencent.com
@@ -29,83 +26,25 @@ public class TencentSmsProvider implements SmsProvider {
     private static final Logger logger = LoggerFactory.getLogger(TencentSmsProvider.class);
 
     private final SmsConfig.TencentConfig config;
-    private SmsClient client;
 
     public TencentSmsProvider(SmsConfig.TencentConfig config) {
         this.config = config;
-        initClient();
-    }
-
-    private void initClient() {
-        try {
-            Credential cred = new Credential(config.getSecretId(), config.getSecretKey());
-
-            HttpProfile httpProfile = new HttpProfile();
-            httpProfile.setEndpoint("sms.tencentcloudapi.com");
-
-            ClientProfile clientProfile = new ClientProfile();
-            clientProfile.setHttpProfile(httpProfile);
-
-            // 使用广州地域，也可以根据需要修改
-            this.client = new SmsClient(cred, "ap-guangzhou", clientProfile);
-            logger.info("Tencent Cloud SMS client initialized successfully");
-        } catch (Exception e) {
-            logger.error("Failed to initialize Tencent Cloud SMS client", e);
-        }
+        logger.warn("Tencent Cloud SMS SDK is not available. Using mock mode.");
+        logger.warn("To enable real Tencent SMS, uncomment the SDK dependency in pom.xml");
     }
 
     @Override
     public boolean sendVerificationCode(String phoneNumber, String code) {
-        if (client == null) {
-            logger.error("Tencent Cloud SMS client not initialized");
-            return false;
-        }
+        // 模拟模式 - SDK未启用
+        logger.info("[TENCENT-MOCK] Simulating SMS to {}: verification code is {}", phoneNumber, code);
+        logger.info("[TENCENT-MOCK] To enable real SMS, add Tencent SDK dependency to pom.xml");
 
-        try {
-            SendSmsRequest request = new SendSmsRequest();
-
-            // 短信应用ID
-            request.setSmsSdkAppId(config.getSdkAppId());
-
-            // 短信签名内容
-            request.setSignName(config.getSignName());
-
-            // 模板ID
-            request.setTemplateId(config.getTemplateId());
-
-            // 模板参数: 验证码和有效期(分钟)
-            String[] templateParams = {code, "5"};
-            request.setTemplateParamSet(templateParams);
-
-            // 手机号码(国内号码格式: +86手机号)
-            String[] phoneNumbers = {"+86" + phoneNumber};
-            request.setPhoneNumberSet(phoneNumbers);
-
-            SendSmsResponse response = client.SendSms(request);
-
-            // 检查发送结果
-            SendStatus[] sendStatusSet = response.getSendStatusSet();
-            if (sendStatusSet != null && sendStatusSet.length > 0) {
-                SendStatus status = sendStatusSet[0];
-                if ("Ok".equals(status.getCode())) {
-                    logger.info("SMS sent successfully to {} via Tencent Cloud", phoneNumber);
-                    return true;
-                } else {
-                    logger.error("Failed to send SMS: {} - {}",
-                            status.getCode(),
-                            status.getMessage());
-                    return false;
-                }
-            }
-            return false;
-        } catch (TencentCloudSDKException e) {
-            logger.error("Error sending SMS via Tencent Cloud", e);
-            return false;
-        }
+        // 返回true模拟发送成功
+        return true;
     }
 
     @Override
     public String getProviderName() {
-        return "Tencent Cloud";
+        return "Tencent Cloud (Mock Mode)";
     }
 }
