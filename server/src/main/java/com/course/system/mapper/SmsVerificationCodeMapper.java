@@ -11,7 +11,12 @@ public interface SmsVerificationCodeMapper {
     SmsVerificationCode findLatestValid(@Param("phoneNumber") String phoneNumber,
             @Param("type") String type);
 
+    SmsVerificationCode findLatestByPhoneAndType(@Param("phoneNumber") String phoneNumber,
+            @Param("type") String type);
+
     int markAsUsed(@Param("id") Long id);
+
+    int deleteById(@Param("id") Long id);
 
     int deleteExpired();
 }
